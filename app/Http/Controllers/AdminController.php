@@ -1,0 +1,90 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Course;
+use App\Models\Transaction;
+
+class AdminController extends Controller
+{
+    public function dashboard()
+    {
+        $totalCourses = Course::count();
+        $totalTransactions = Transaction::where('status', 'success')->count();
+        $totalIncome = Transaction::where('status', 'success')
+            ->join('courses', 'transactions.course_id', '=', 'courses.id')
+            ->sum('courses.price');
+
+        return view('dashboard.admin', compact('totalCourses', 'totalTransactions', 'totalIncome'));
+    }
+
+    public function listCourses()
+    {
+        $courses = Course::all();
+        return view('admin.courses.index', compact('courses'));
+    }
+
+
+    public function createCourse()
+    {
+        return view('admin.courses.create');
+    }
+
+
+    public function storeCourse(Request $request)
+    {
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'price' => 'required|numeric',
+            'level' => 'required',
+        ]);
+
+        Course::create($request->all());
+
+        return redirect()->route('admin.courses')->with('message', 'Kursus berhasil ditambahkan!');
+    }
+
+
+    public function editCourse($id)
+    {
+        $course = Course::findOrFail($id);
+        return view('admin.courses.edit', compact('course'));
+    }
+
+
+    public function updateCourse(Request $request, $id)
+    {
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'price' => 'required|numeric',
+            'level' => 'required',
+        ]);
+
+        $course = Course::findOrFail($id);
+        $course->update($request->all());
+
+        return redirect()->route('admin.courses')->with('message', 'Kursus berhasil diperbarui!');
+    }
+
+
+    public function deleteCourse($id)
+    {
+        $course = Course::findOrFail($id);
+        $course->delete();
+
+        return redirect()->route('admin.courses')->with('message', 'Kursus berhasil dihapus!');
+    }
+
+    public function transactionReport()
+    {
+        $transactions = Transaction::with(['course', 'user'])
+            ->where('status', 'success')
+            ->orderBy('payment_date', 'desc')
+            ->get();
+
+        return view('admin.transactions.index', compact('transactions'));
+    }
+}
