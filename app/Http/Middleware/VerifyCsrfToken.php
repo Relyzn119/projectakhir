@@ -9,9 +9,9 @@ class VerifyCsrfToken extends Middleware
     /**
      * The URIs that should be excluded from CSRF verification.
      *
-     * Kalau kamu ingin pengecualian CSRF, tambahkan di array ini.
+     * @var array
      */
     protected $except = [
-        // Contoh: '/webhook/payment'
+        // '/webhook/payment'
     ];
 }

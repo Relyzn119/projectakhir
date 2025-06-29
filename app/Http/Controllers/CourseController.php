@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
-     // ini daftar semua kursus, nanti tambahkan aja bagian show dan dashboard
+     // ini daftar semua kursus, nanti tambahkan aja bagian show dan dashboard fel
     public function index()
     {
         $courses = Course::all();

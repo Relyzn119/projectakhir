@@ -2,29 +2,53 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\Course;
 use Illuminate\Database\Seeder;
+use App\Models\Course;
+use App\Models\User;
 
 class CourseSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        Course::create([
-            'title' => 'Belajar PHP Dasar',
-            'description' => 'Kursus lengkap untuk pemula belajar PHP.',
-            'price' => 50000,
-            'level' => 'Beginner',
-        ]);
+        // Cari user admin pertama
+        $admin = User::where('role', 'admin')->first();
 
-        Course::create([
-            'title' => 'Laravel untuk Pemula',
-            'description' => 'Belajar framework Laravel dari dasar.',
-            'price' => 75000,
-            'level' => 'Beginner',
-        ]);
+        if (!$admin) {
+            // Jika belum ada, buat user admin default
+            $admin = User::create([
+                'name' => 'Admin',
+                'email' => 'admin@kursus.com',
+                'password' => bcrypt('password'),
+                'role' => 'admin',
+            ]);
+        }
+
+        // Buat data kursus dummy
+        $courses = [
+            [
+                'title' => 'Belajar Laravel Dasar',
+                'description' => 'Pelajari dasar-dasar Laravel untuk pemula.',
+                'price' => 150000,
+                'level' => 'Pemula',
+            ],
+            [
+                'title' => 'Mastering PHP OOP',
+                'description' => 'Pahami konsep Object Oriented Programming dalam PHP.',
+                'price' => 120000,
+                'level' => 'Menengah',
+            ],
+            [
+                'title' => 'Java Spring Boot Basics',
+                'description' => 'Memulai pengembangan web dengan Java Spring Boot.',
+                'price' => 180000,
+                'level' => 'Pemula',
+            ],
+        ];
+
+        foreach ($courses as $data) {
+            Course::create(array_merge($data, [
+                'user_id' => $admin->id,
+            ]));
+        }
     }
 }
