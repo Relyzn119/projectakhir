@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="bg-white shadow rounded overflow-hidden">
-                    <div class="h-40 bg-gray-300 flex items-center justify-center"># Gambar</div>
+                    <div class="h-40 bg-gray-300 flex items-center justify-center"><img src="{{ asset('images/java.png') }}" alt="Laravel Dasar"  class="object-cover w-full h-full"></div>
                     <div class="p-4">
                         <h3 class="font-semibold text-lg mb-1">Java OOP & Spring</h3>
                         <p class="text-sm text-gray-600">Pahami konsep OOP dan framework backend modern.</p>
@@ -56,6 +56,31 @@
                 </div>
             </div>
         </div>
+         <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-2xl font-bold mb-8 text-center"></h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white shadow rounded overflow-hidden">
+                    <div class="h-40 bg-gray-300 flex items-center justify-center"># Gambar</div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-lg mb-1">Laravel Dasar</h3>
+                        <p class="text-sm text-gray-600">Mulai membangun aplikasi web dengan Laravel.</p>
+                    </div>
+                </div>
+                <div class="bg-white shadow rounded overflow-hidden">
+                    <div class="h-40 bg-gray-300 flex items-center justify-center"><img src="{{ asset('images/java.png') }}" alt="Laravel Dasar"  class="object-cover w-full h-full"></div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-lg mb-1">Java OOP & Spring</h3>
+                        <p class="text-sm text-gray-600">Pahami konsep OOP dan framework backend modern.</p>
+                    </div>
+                </div>
+                <div class="bg-white shadow rounded overflow-hidden">
+                    <div class="h-40 bg-gray-300 flex items-center justify-center"># Gambar</div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-lg mb-1">Dasar Golang</h3>
+                        <p class="text-sm text-gray-600">Bahasa modern untuk aplikasi cepat dan efisien.</p>
+                    </div>
+                </div>
+            </div>
     </section>
 
     <!-- CTA TERAKHIR -->
