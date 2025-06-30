@@ -13,15 +13,19 @@ class RedirectIfAuthenticated
      */
     public function handle(Request $request, Closure $next, ...$guards)
     {
-        $guards = empty($guards) ? [null] : $guards;
+      foreach ($guards as $guard) {
+        if (Auth::guard($guard)->check()) {
+            // Redirect berdasarkan role
+            $user = Auth::guard($guard)->user();
 
-        foreach ($guards as $guard) {
-            if (Auth::guard($guard)->check()) {
-                // Redirect ke dashboard biasa
-                return redirect('/dashboard');
+            if ($user->role === 'admin') {
+                return redirect()->route('admin.dashboard');
             }
-        }
 
-        return $next($request);
+            return redirect()->route('dashboard');
+        }
     }
+
+    return $next($request);
+}
 }

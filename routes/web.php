@@ -11,9 +11,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -29,4 +26,12 @@ Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.sh
 Route::middleware(['auth'])->group(function () {
     Route::post('/checkout/{id}', [TransactionController::class, 'checkout'])->name('checkout');
 });
+Route::middleware(['auth'])->get('/dashboard', [CourseController::class, 'userDashboard'])->name('dashboard');
+Route::view('/about', 'about')->name('about');
+Route::view('/contact', 'contact')->name('contact');
+Route::get('/', function () {
+    return view('landing');
+});
+
+
 require __DIR__ . '/auth.php';
