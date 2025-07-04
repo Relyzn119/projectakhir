@@ -15,7 +15,10 @@
     x-data="{ current: 0, slides: [
         '{{ asset('images/slideshow/slide1.png') }}',
         '{{ asset('images/slideshow/slide2.png') }}',
+        '{{ asset('images/slideshow/slide3.png') }}',
         '{{ asset('images/slideshow/slide3.png') }}'
+        
+        
     ] }"
     x-init="setInterval(() => { current = (current + 1) % slides.length }, 4000)"
     class="relative w-full h-64 bg-white bg-opacity-10 rounded-xl flex items-center justify-center text-white text-2xl font-bold backdrop-blur-sm border border-white border-opacity-30 overflow-hidden"
