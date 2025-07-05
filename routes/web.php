@@ -8,6 +8,8 @@ use App\Http\Controllers\LandingController;
 use Illuminate\Auth\Middleware\Authenticate;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
+use App\Exports\TransactionsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 Route::get('/', function () {
@@ -56,6 +58,11 @@ Route::middleware(['auth'])->get('/dashboard', [CourseController::class, 'userDa
 Route::view('/about', 'about')->name('about');
 Route::view('/contact', 'contact')->name('contact');
 Route::get('/', [LandingController::class, 'index'])->name('landing');
+Route::get('/transactions/export/excel', function () {
+    return Excel::download(new TransactionsExport, 'laporan-transaksi.xlsx');
+})->name('admin.transactions.export.excel');
+Route::get('/dashboard/export/pdf', [AdminController::class, 'exportDashboardPdf'])->name('admin.dashboard.export.pdf');
+Route::get('/dashboard/export/excel', [AdminController::class, 'exportDashboardExcel'])->name('admin.dashboard.export.excel');
 
 
 require __DIR__ . '/auth.php';

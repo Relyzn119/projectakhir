@@ -2,6 +2,7 @@
 
 <x-admin-layout>
     <x-slot name="header">
+
         <h2 class="font-semibold text-xl text-black leading-tight">
             {{ __('Dashboard Admin') }}
         </h2>
@@ -34,8 +35,18 @@
                     <p class="text-3xl font-bold text-black">Rp {{ number_format($totalIncome, 0, ',', '.') }}</p>
                 </div>
             </div>
+<br>
+<div class="flex justify-end mb-6 space-x-2">
+    <a href="{{ route('admin.dashboard.export.pdf') }}" target="_blank"
+       class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow text-sm">
+        📄 Export PDF
+    </a>
+    <a href="{{ route('admin.dashboard.export.excel') }}"
+       class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow text-sm">
+        📊 Export Excel
+    </a>
+</div>
 
-            {{-- Chart Transaksi --}}
             {{-- Chart Section --}}
             <div class="mt-16 bg-gray-800 p-6 rounded-xl shadow-lg">
                 <h4 class="text-xl font-semibold text-white mb-4">📈 Grafik Transaksi Bulanan</h4>

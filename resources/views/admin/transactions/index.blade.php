@@ -1,9 +1,23 @@
 <x-admin-layout>
-    <x-slot name="header">
+   <x-slot name="header">
+    <div class="flex items-center justify-between">
         <h2 class="font-semibold text-xl text-indigo-700 leading-tight">
             Laporan Transaksi
         </h2>
-    </x-slot>
+        <div class="space-x-2">
+            <a href="{{ route('admin.transactions.export.pdf') }}" target="_blank"
+               class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow text-sm">
+                Export PDF
+            </a>
+            <a href="{{ route('admin.transactions.export.excel') }}"
+               class="bg-green-600 hover:bg-green-700 text-purple-500 px-4 py-2 rounded shadow text-sm">
+                Export Excel
+            </a>
+        </div>
+    </div>
+</x-slot>
+
+
 
     <div class="py-10 bg-gray-50 min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -24,7 +38,7 @@
                     <table class="min-w-full divide-y divide-gray-200 text-sm">
                         <thead class="bg-gray-100 text-gray-700">
                             <tr>
-                                <th class="px-4 py-2 text-left">#</th>
+                                <th class="px-4 py-2 text-left">No</th>
                                 <th class="px-4 py-2 text-left">Nama User</th>
                                 <th class="px-4 py-2 text-left">Kursus</th>
                                 <th class="px-4 py-2 text-left">Tanggal</th>

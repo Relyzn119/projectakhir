@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DashboardExport;
 
 class AdminController extends Controller
 {
@@ -127,6 +130,38 @@ return redirect()->route('admin.courses')->with('message', 'Kursus berhasil dita
     return response()->json([
         'monthlySales' => $monthlySales
     ]);
+}
+public function exportPdf()
+{
+    $transactions = Transaction::with('course', 'user')->where('status', 'success')->get();
+    $pdf = Pdf::loadView('admin.transactions.export_pdf', compact('transactions'));
+
+    return $pdf->download('laporan-transaksi.pdf');
+}
+public function exportDashboardPdf()
+{
+    $totalCourses = Course::count();
+    $totalTransactions = Transaction::where('status', 'success')->count();
+    $totalIncome = Transaction::where('status', 'success')
+        ->join('courses', 'transactions.course_id', '=', 'courses.id')
+        ->sum('courses.price');
+
+    $monthlySales = Transaction::selectRaw('strftime("%m", payment_date) as month, SUM(courses.price) as total')
+        ->join('courses', 'transactions.course_id', '=', 'courses.id')
+        ->where('status', 'success')
+        ->groupBy('month')
+        ->get();
+
+    $pdf = Pdf::loadView('exports.dashboard-pdf', compact(
+        'totalCourses', 'totalTransactions', 'totalIncome', 'monthlySales'
+    ));
+
+    return $pdf->download('laporan-penjualan-dashboard.pdf');
+}
+
+public function exportDashboardExcel()
+{
+    return Excel::download(new DashboardExport, 'laporan-penjualan-dashboard.xlsx');
 }
 
 }
