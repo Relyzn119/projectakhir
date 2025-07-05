@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\Transaction;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -34,16 +35,28 @@ class AdminController extends Controller
 
     public function storeCourse(Request $request)
     {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'price' => 'required|numeric',
-            'level' => 'required',
-        ]);
+      $request->validate([
+    'title' => 'required',
+    'description' => 'required',
+    'price' => 'required|numeric',
+    'level' => 'required',
+    'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+]);
 
-        Course::create($request->all());
+$data = $request->all();
+$data['user_id'] = Auth::id();
 
-        return redirect()->route('admin.courses')->with('message', 'Kursus berhasil ditambahkan!');
+if ($request->hasFile('thumbnail')) {
+    $file = $request->file('thumbnail');
+    $filename = time() . '_' . $file->getClientOriginalName();
+    $file->move(public_path('images/thumbnails'), $filename);
+    $data['thumbnail'] = 'images/thumbnails/' . $filename;
+}
+
+Course::create($data);
+
+return redirect()->route('admin.courses')->with('message', 'Kursus berhasil ditambahkan!');
+
     }
 
 
@@ -57,16 +70,27 @@ class AdminController extends Controller
     public function updateCourse(Request $request, $id)
     {
         $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'price' => 'required|numeric',
-            'level' => 'required',
-        ]);
+        'title' => 'required',
+        'description' => 'required',
+        'price' => 'required|numeric',
+        'level' => 'required',
+        'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+    ]);
 
-        $course = Course::findOrFail($id);
-        $course->update($request->all());
+    $course = Course::findOrFail($id);
 
-        return redirect()->route('admin.courses')->with('message', 'Kursus berhasil diperbarui!');
+    $data = $request->all();
+
+    if ($request->hasFile('thumbnail')) {
+        $file = $request->file('thumbnail');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('images/thumbnails'), $filename);
+        $data['thumbnail'] = 'images/thumbnails/' . $filename;
+    }
+
+    $course->update($data);
+
+    return redirect()->route('admin.courses')->with('message', 'Kursus berhasil diperbarui!');
     }
 
 
@@ -80,11 +104,29 @@ class AdminController extends Controller
 
     public function transactionReport()
     {
-        $transactions = Transaction::with(['course', 'user'])
-            ->where('status', 'success')
-            ->orderBy('payment_date', 'desc')
-            ->get();
+       $transactions = Transaction::with(['course', 'user'])
+        ->where('status', 'success')
+        ->orderBy('payment_date', 'desc')
+        ->get();
 
-        return view('admin.transactions.index', compact('transactions'));
+    return view('admin.transactions.index', compact('transactions'));
     }
+    public function statisticsData()
+{
+    $totalCourses = Course::count();
+    $totalTransactions = Transaction::where('status', 'success')->count();
+    $totalIncome = Transaction::where('status', 'success')
+        ->join('courses', 'transactions.course_id', '=', 'courses.id')
+        ->sum('courses.price');
+
+     $monthlySales = \App\Models\Transaction::selectRaw('strftime("%m", payment_date) as month, count(*) as total')
+        ->where('status', 'success')
+        ->groupBy('month')
+        ->get();
+
+    return response()->json([
+        'monthlySales' => $monthlySales
+    ]);
+}
+
 }
