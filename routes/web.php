@@ -5,7 +5,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\LandingController;
+use Illuminate\Auth\Middleware\Authenticate;
+use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,9 +20,22 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+// Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+//     Route::get('/dashboard', [App\Http\Controllers\AdminController::class, 'dashboard'])->name('admin.dashboard');
+// });
+//  Route::post('/dashboard', [App\Http\Controllers\AdminController::class, 'index']);
+// Route::middleware(['auth', 'admin.check'])->prefix('admin')->group(function () {
+//     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+// }); Class [Admin] not defined, bye-bye error
+
+Route::middleware([
+    Authenticate::class,
+    AdminMiddleware::class,
+])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 });
+
+
 Route::get('/tes-admin', [AdminController::class, 'dashboard']);
 Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
 Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
