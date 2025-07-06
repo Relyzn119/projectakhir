@@ -116,11 +116,11 @@
             <!-- CARD 4 -->
             <div class="bg-gradient-to-br from-[#1c1c2c] via-[#311d3d] to-[#181827] rounded-3xl overflow-hidden shadow-xl hover:shadow-pink-400/30 transition-all duration-300 transform hover:-translate-y-3 border border-pink-400/10 cursor-pointer">
                 <div class="h-52 overflow-hidden">
-                <img src="{{ asset('images/Laravel.jpg') }}" alt="Laravel Dasar" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+                <img src="{{ asset('images/KOTLIN.png') }}" alt="Laravel Dasar" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
                 </div>
                 <div class="p-6">
-                <h3 class="text-xl font-bold text-white font-serif italic mb-1">Laravel Dasar</h3>
-                <p class="text-white/80 text-sm font-light">Mulai membangun aplikasi web dengan Laravel.</p>
+                <h3 class="text-xl font-bold text-white font-serif italic mb-1">Kotlin</h3>
+                <p class="text-white/80 text-sm font-light">Bahasa canggih untuk pengembangan aplikasi Android yang modern dan aman.</p>
                 </div>
             </div>
 

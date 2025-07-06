@@ -13,10 +13,10 @@
                 <div class="relative z-10">
                    <div
     x-data="{ current: 0, slides: [
-        '{{ asset('images/slideshow/slide1.png') }}',
-        '{{ asset('images/slideshow/slide2.png') }}',
-        '{{ asset('images/slideshow/slide3.png') }}',
-        '{{ asset('images/slideshow/slide3.png') }}'
+        '{{ asset('images/slideshow/DATA.png') }}',
+        '{{ asset('images/slideshow/KOTLIN.png') }}',
+        '{{ asset('images/slideshow/PHP.jpg') }}',
+        '{{ asset('images/slideshow/PYTHON.png') }}'
         
         
     ] }"
