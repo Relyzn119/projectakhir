@@ -19,7 +19,8 @@
             <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                 <div class="h-64 bg-gray-100 flex items-center justify-center">
                     @if ($course->thumbnail)
-                        <img src="{{ asset($course->thumbnail) }}" alt="{{ $course->title }}" class="object-cover h-full w-full">
+                        <img src="{{ asset($course->thumbnail) }}" alt="{{ $course->title }}"
+                            class="object-cover h-full w-full">
                     @else
                         <span class="text-indigo-400"># Gambar Kursus</span>
                     @endif
@@ -28,9 +29,13 @@
                     <h3 class="text-2xl font-bold text-indigo-700">{{ $course->title }}</h3>
 
                     {{-- Badge Level --}}
-                    <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full
-                        {{ $course->level === 'Pemula' ? 'bg-green-100 text-green-600' :
-                           ($course->level === 'Menengah' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600') }}">
+                    <span
+                        class="inline-block px-3 py-1 text-xs font-semibold rounded-full
+                        {{ $course->level === 'Pemula'
+                            ? 'bg-green-100 text-green-600'
+                            : ($course->level === 'Menengah'
+                                ? 'bg-yellow-100 text-yellow-600'
+                                : 'bg-red-100 text-red-600') }}">
                         {{ $course->level }}
                     </span>
 
@@ -44,18 +49,46 @@
                             @if ($alreadyBought)
                                 <div class="text-green-600 font-semibold">✅ Kamu sudah membeli kursus ini.</div>
                             @else
-                                <form action="{{ route('checkout', $course->id) }}" method="POST">
+                                <form id="checkoutForm" action="{{ route('checkout', $course->id) }}" method="POST">
                                     @csrf
-                                    <button type="submit"
+                                    <button type="button" id="confirmCheckout"
                                         class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-purple-50 font-semibold py-2 px-4 rounded-lg shadow-md hover:from-indigo-600 hover:to-purple-700 transition duration-300 ease-in-out">
                                         🛒 Beli Sekarang
                                     </button>
                                 </form>
+                                <script>
+                                    document.getElementById('confirmCheckout').addEventListener('click', function(e) {
+                                        Swal.fire({
+                                            title: 'Konfirmasi Pembelian',
+                                            text: 'Apakah Anda yakin ingin membeli kursus ini?',
+                                            icon: 'question',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#6366f1',
+                                            cancelButtonColor: '#d33',
+                                            confirmButtonText: 'Ya, Beli Sekarang!',
+                                            cancelButtonText: 'Batal'
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                document.getElementById('checkoutForm').submit();
+                                            }
+                                        });
+                                    });
+
+                                    @if (session('message'))
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Berhasil!',
+                                            text: "{{ session('message') }}",
+                                            confirmButtonColor: '#6366f1',
+                                        });
+                                    @endif
+                                </script>
                             @endif
                         @else
                             <p class="text-sm text-gray-600">
                                 Silakan
-                                <a href="{{ route('login') }}" class="text-indigo-600 hover:underline font-medium">login</a>
+                                <a href="{{ route('login') }}"
+                                    class="text-indigo-600 hover:underline font-medium">login</a>
                                 untuk membeli kursus ini.
                             </p>
                         @endauth
@@ -65,3 +98,4 @@
         </div>
     </div>
 </x-app-layout>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

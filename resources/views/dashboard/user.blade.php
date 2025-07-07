@@ -2,8 +2,8 @@
 
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-white leading-tight">
-            {{ __('Dashboard Saya') }}
+        <h2 class="font-semibold text-xl text-purple-400 leading-tight">
+            Dashboard {{ Auth::check() ? Auth::user()->name : '' }}
         </h2>
     </x-slot>
 
